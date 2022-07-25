@@ -297,8 +297,19 @@ function isCreditCardNumber(/* ccn */) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+function getDigitalRoot(num) {
+  if (num < 10) {
+    return num;
+  }
+  const arr = [];
+  let digit = num;
+  for (let i = digit; i > 9; i -= 1) {
+    arr.push(digit % 10);
+    digit = Math.floor(digit / 10);
+  }
+  arr.push(digit);
+  const res = arr.reduce((a, b) => a + b, 0);
+  return getDigitalRoot(res);
 }
 
 
@@ -323,8 +334,23 @@ function getDigitalRoot(/* num */) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  // Create a hash
+  const map = {
+    ')': '(',
+    '}': '{',
+    ']': '[',
+    '>': '<',
+  };
+  const stck = [];
+  for (let i = 0; i < str.length; i += 1) {
+    if (str[i] === '(' || str[i] === '[' || str[i] === '{' || str[i] === '<') {
+      stck.push(str[i]);
+    } else if (stck[stck.length - 1] === map[str[i]]) {
+      stck.pop();
+    } else return false;
+  }
+  return !stck.length;
 }
 
 
@@ -348,8 +374,8 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  return (num).toString(n);
 }
 
 
@@ -365,8 +391,18 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  let ind = 0;
+  for (let i = 1; i < pathes[0].length; i += 1) {
+    const common = pathes.every((el) => el.startsWith(pathes[0].slice(0, i)));
+    if (!common) {
+      return pathes[0].slice(0, ind);
+    }
+    if (pathes[0][i - 1] === '/') {
+      ind = i;
+    }
+  }
+  return '';
 }
 
 
@@ -388,8 +424,19 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const res = [];
+  for (let i = 0; i < m1.length; i += 1) {
+    res[i] = [];
+    for (let j = 0; j < m2[0].length; j += 1) {
+      let sum = 0;
+      for (let y = 0; y < m1[0].length; y += 1) {
+        sum += m1[i][y] * m2[y][j];
+      }
+      res[i][j] = sum;
+    }
+  }
+  return res;
 }
 
 
